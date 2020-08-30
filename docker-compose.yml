@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  api:
+    build:
+      context: ./app
+    ports:
+      - '4200:4200'
+    environment:
+      - NODE_ENV=production
+      - PORT=4200
+
+  grafana:
+    build:
+      context: ./grafana
+    ports:
+      - 3000:3000
+    user: "104"
+    volumes:
+    - grafana_volume:/var/lib/grafana grafana/grafana
+
+volumes:
+  grafana_volume:
