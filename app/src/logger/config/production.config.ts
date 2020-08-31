@@ -7,6 +7,9 @@ const productionConfig: LoggerOptions = {
     remove: true,
   },
   messageKey: 'message',
+  formatters: {
+    level: level => ({ level })
+  }
 };
 
 export { productionConfig };

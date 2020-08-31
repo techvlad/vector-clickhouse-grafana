@@ -1,0 +1,19 @@
+[sources.in]
+    type = "docker"
+
+#[transforms.json_transform]
+#    type = "json_parser" # required
+#    inputs = ["in"] # required
+#    drop_field = true # optional, default
+#    drop_invalid = false # required
+#    overwrite_target = true
+#    field = "message" # optional, default
+
+[sinks.out]
+    type = "elasticsearch" # required
+    inputs = ["in"] # required
+    host = "http://elasticsearch:9200" # optional, no default
+    index = "vector" # optional, default
+    auth.strategy = "basic"
+    auth.password = "elastic"
+    auth.user = "elastic"

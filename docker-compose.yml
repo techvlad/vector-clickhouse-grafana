@@ -16,7 +16,37 @@ services:
       - 3000:3000
     user: "104"
     volumes:
-    - grafana_volume:/var/lib/grafana grafana/grafana
+      - grafana_volume:/var/lib/grafana grafana/grafana
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: elastic
+      ELASTICSEARCH_USERNAME: elastic
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks
+      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    volumes:
+      - elasticsearch_volume:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  vector:
+    build:
+      context: ./vector
+    ports:
+      - 9000:9000
+    volumes:
+      - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./vector/vector.toml:/etc/vector/vector.toml"
+    depends_on:
+      - elasticsearch
 
 volumes:
   grafana_volume:
+  elasticsearch_volume:

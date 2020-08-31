@@ -11,6 +11,9 @@ const developmentConfig: LoggerOptions = {
     remove: true,
   },
   messageKey: 'message',
+  formatters: {
+    level: level => ({ level })
+  }
 };
 
 export { developmentConfig };
